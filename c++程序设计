@@ -75,14 +75,92 @@
     func(10);//等效于func（10,2,3）
     func(10,8);//等效于func(10,8,3)
     func(10,,8);//不行，只能最右边的连续若干个参数缺省。
-  
+ 
+ 
+面向对象：
+    如何构建类：
+        写一个程序，输入矩形的宽和高，输入面积和周长。
+           ·矩形的属性-宽和高
+             ·两个变量，分别代表宽和高。
+           ·对矩形的操作
+             ·设置宽和高
+             ·计算面积
+             ·计算周长
+        矩形类
+        int w;     -- 成员变量  ---
+        int h;     --    
+                               ---   类的成员    
+        Area();     --            
+        perimeter();--成员函数  ---
+        lnit(...);  --
+        
+     对象的内存分配   
+       ·对象的内存空间
+         ·对象的大小=所有成员变量的大小之和
+       ·每个对象各有自己的存储空间
+         ·一个对象的某个成员变量被改变，不会影响到其他变量。
+     
+     对象间的运算
+       ·对象之间可以用‘=’进行赋值
+       ·不能用‘==’，‘！=’，‘>’,‘<’,‘>=’,‘<=’进行比较
+           ·除非这些运算符经过了“重载”
+           
+     *访问类的成员变量和成员函数*
+       ·用法1：对象名.成员名
+           class CRectangle(){
+              int w.....
+              .....
+              int lnit(){...}
+              ...
+           
+           }
+           int main(){
+               CRectangle r1,r2;
+               r1.w=5;
+               r2.lnit(3,4);
+           }
+    
+      ·用法2：指针->成员名
+          CRectangle r1,r2;
+          CRectangle *p1=&r1;
+          CRectangle *p2=&r2;
+          p1->w=5;
+          p2->lnit(3,4);//lnit作用在p2指向的对象上
 
-
-
-
-
-
-
+      ·用法3：引用名.成员名
+          CRectangle r2;
+          CRectangle &rr=r2;
+          rr.w=5;
+          rr.lnit(3,4);
+       
+      ·另一种输出结果的方式
+          void PrintRectangle(CRectangle & r){
+              cout<<r.Area()<<","<<r.Perimeter();
+          }
+          CRectangle r3;
+          r3.lnit(3,4);
+          PrintRectangle(r3);
+        
+     ·类的成员函数的另一种写法
+         ·成员函数和类的定义分开写
+         class CRectangle
+         {
+             public:
+                int w,h;
+                int Area();//成员函数仅在此处声明
+                int Perimeter();
+                void lnit(int w-,int h_);
+         };
+         int CRectangle::Area(){
+              return w*h;
+          }
+         int CRectangle::Perimeter(){
+             return 2*(w+h);
+         }
+         void CRectangle::lnit(int w_,int h_){
+             w=w_;h=h_;
+         }
+         调用通过：对象/对象的指针/对象的引用
 
 
 
