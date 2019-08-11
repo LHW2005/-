@@ -437,6 +437,36 @@
              ·重载为友元函数的情况：
                  ·成员函数不能满足使用要求
                  ·普通函数，又不能访问类的私有成员
+                 
+                 
+     ·流插入运算符的重载
+          ·cout是在iostream中定义的ostream类的对象。
+          ·“<<”能用在cout上是因为，在iostream中对“<<”进行了重载。  
+          
+         
+     ·自加/自减运算符的重载
+         ·自加++/自减--运算符有前置/后置之分
+         
+         ·前置运算符作为一元运算符重载
+             ·重载为成员函数：
+             T operator++();
+             T operator--();
+             ·重载为全局函数：
+             T operator++(T);
+             T operator--(T);
+         ·++obj,obj.operator++(),operator++(obj)都调用上述函数
+         
+         ·后置运算符作为二元运算符重载
+             ·多写一个参数，具体无意义
+             ·重载为成员函数：
+             T operator++(int);
+             T operator--(int);
+             ·重载为全局函数：
+             T operator++(T,int);
+             T operator--(T,int);
+             ·obj++,obj.operator++(0),operator++(obj,0)都调用上函数。
+                 
+     
      
      
      
