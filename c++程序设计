@@ -465,6 +465,13 @@
              T operator++(T,int);
              T operator--(T,int);
              ·obj++,obj.operator++(0),operator++(obj,0)都调用上函数。
+             
+         ·int作为一个类型强制转换运算符被重载，
+             Demo s;
+             (int)s;
+         ·类型强制转换运算符重载时，
+             ·不能写返回值类型
+             ·实际上其返回值类型--类型强制转换运算符代表的类型
                  
      
      
