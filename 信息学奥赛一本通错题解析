@@ -809,6 +809,87 @@ int main()
     }
     
     
+21.  1261：【例9.5】城市交通路网
+
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<algorithm>
+    #define maxn 100
+    #define inf 1e9
+    int a[maxn][maxn];
+    int f[maxn];
+    int pre[maxn];
+    using namespace std;
+    int main()
+    {
+        int n;
+      scanf("%d",&n);
+        memset(a,0,sizeof(a));
+        memset(pre,0,sizeof(pre));//将两个数组清零 
+        for(int i=1;i<=n;i++)
+            for(int j=1;j<=n;j++)//读入数据 
+          scanf("%d",&a[i][j]);
+            for(int i=1;i<=maxn;i++)//如入路程 
+                f[i]=inf;
+                f[n]=0;
+        for(int i=n-1;i>=1;i--)
+            for(int j=i+1;j<=n;j++)
+        {
+            if(a[i][j]>0&&f[j]!=inf&&f[i]>a[i][j]+f[j])//判断是否是最短路径 
+     
+                {f[i]=f[j]+a[i][j];
+                pre[i]=j;    //求出最少的钱 
+     
+        }
+        }
+        printf("minlong=%d\n",f[1]);
+        int k=1;
+        while(k!=0)
+        {
+            printf("%d ",k);
+            k=pre[k];
+     
+                }
+                printf("\n");
+    }
+   
+   22.   1263：【例9.7】友好城市
+    #include<iostream>
+    #include<cstdio>
+    #include<algorithm>
+    #include<iomanip>
+    using namespace std;
+    struct node//表示走法 
+    {
+        int east,west;
+    };
+    node a[5100];
+    int d[5100];
+    bool cmp(node c,node d)//记录航道数 
+    {
+        return c.east<d.east;
+    }
+    int main()
+    {
+        int n;
+        scanf("%d",&n);
+        int i,x,len=1;
+        for(i=1;i<=n;i++)
+            scanf("%d%d",&a[i].east,&a[i].west);
+        d[1]=a[1].west;
+        sort(a+1,a+n+1,cmp);//重新排列友好城市，按cmp(从小到大)排 
+        for(i=2;i<=n;i++)
+        {
+            x=upper_bound(d+1,d+len+1,a[i].west)-d;
+            d[x]=a[i].west;
+            if(x>len)len++;
+        }
+        cout<<len<<endl;
+        return 0;
+    }
+
+    
     
     
     
