@@ -273,12 +273,540 @@ int main()
         return 0;
     }
     
+    
     8.   1217：棋盘问题
-     
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #define N 10
+    using namespace std;
+    int n,k;
+    char maps[N][N];
+    int vis[N];
+    int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};//走的方式（向前，向后，向左，向右） 
+    int cnt;
+    void dfs(int x,int y)//摆放的方案数量 
+    {
+        if(y==k)//判断棋盘位置与数量是否相等（相等的话只有一种走法） 
+        {
+            cnt++;
+            return;
+        }
+        for(int i=x;i<=n;i++)
+            for(int j=1;j<=n;j++)
+                if(maps[i][j]=='#'&&vis[j])//判断是否在棋盘上以及此处是否了东西 
+                {
+                    vis[j]=0;
+                    dfs(i+1,y+1);
+                    vis[j]=1;
+                }
+         return;
+    }
+    int main()
+    {
+        while(scanf("%d%d",&n,&k)!=EOF)//读入数据 
+        {
+            if(n==-1&&k==-1)
+                break;
+ 
+            memset(vis,1,sizeof(vis));//重置其值为1，用来标记棋盘上是否有子 
+ 
+            for(int i=1;i<=n;i++)
+                for(int j=1;j<=n;j++)
+                    cin>>maps[i][j];
+ 
+            cnt=0;
+            dfs(1,0);
+            cout<<cnt<<endl;
+        }
+        return 0;
+    }
+   
+     10.   1221：分成互质组
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<algorithm>
+    #define N 20
+    using namespace std;
+    int n;
+    int a[N];
+    int cnt=99999;
+    long long vis[N];
+    long long gcd(long long a,long long b)//是否互指 
+    {
+        if(b==0)
+            return a;
+        return
+            gcd(b,a%b);
+    }
+    void dfs(int k,int step)//完成分组 
+    {
+        if(step==n+1)
+    {
+            if(k<cnt)
+                cnt=k;
+             return;
+    }
+    for(int i=1;i<=k;i++)
+        if(gcd(vis[i],a[step])==1)//判断是否互质 
+        {
+            vis[i]*=a[step];
+            dfs(k,step+1);
+            vis[i]/=a[step];//完成记录 
+        }
+        vis[k+1]*=a[step];
+        dfs(k+1,step+1);
+        vis[k+1]/=a[step];//为下次准备 
+    }
+        int main()
+        {
+        int temp;
+         cin>>n;
+           for(int i=1;i<=n;i++)//读入数据 
+        { 
+            cin>>a[i];
+            vis[i]=1;
+    }
+    sort(a+1,a+1+n);
+    dfs(1,1);
+    cout<<cnt<<endl;
+    return 0;
+}
+    
+    
+ 11.   1222：放苹果
+    #include<iostream>
+    using namespace std;
+    int f(int m,int n){
+        if(n>m)
+	    return f(m,m);
+        if(m==0)
+            return 1;
+        if(n==0)
+            return 0;
+        return f(m,n-1)+f(m-n,n);//摆放的可能性有：空着盘子的 +不空盘中的。空着盘子的每次循环盘子数减一，表示少一个盘子的方法，少两个的方法....，
+	不空的循环时: 剪掉盘数，表示每盘放一个后的可能性. 
+    }
+    int main(){
+	    int t,m,n;
+	    cin>>t;
+	    while(t--){
+		    cin>>m>>n;
+		    cout<<f(m,n)<<endl;
+	    }
+	    return 0;
+    }
 
   
+      12.  1325：循环比赛日程表
+    #include<bits/stdc++.h>
+    using namespace std;
+    const int maxn=1025;
+    int m[maxn][maxn];//记录n名选手的循环比赛表
+    int main()
+    {
+        int m1;
+        cin>>m1;
+        int n=1<<m1;//相当于2^m
+        int k=1,half=1;//half相当于方阵现在的大小
+        m[0][0]=1;
+        while(k<=m1)
+        {
+            for(int i=0;i<half;i++)//构造右上角
+            {
+                for(int j=0;j<half;j++)
+                {
+                    m[i][j+half]=m[i][j]+half;
+                }
+            }
+            for(int i=0;i<half;i++)//对称交换构造下半部分方阵
+            {
+                for(int j=0;j<half;j++)
+                {
+                    m[i+half][j]=m[i][j+half];//左下
+                    m[i+half][j+half]=m[i][j];//右下
+                }
+            }
+            half*=2;
+            k++;
  
+        }
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(j)
+                    cout<<" ";
+                cout<<m[i][j];
+            }
+            cout<<endl;
+        }
+        return 0;
+    }
+    
+     13.   1326：【例7.5】取余运算(mod)
+    #include<bits/stdc++.h>
+    using namespace std;
+    int b,p,k;
+    int calculate(int p)
+    {
+        int temp;
+ 
+        if(p==0)//b^0%k=1
+            return 1;
+            cout<<p<<endl;
+        temp=calculate(p/2)%k;//将p除于2，降低数值。 
+        temp=(temp*temp)%k;//b^p%k=(b^(p/2)^2)%k
+        if(p%2==1)
+            temp=(temp*b)%k; 
+        return temp;
+     }
+    int main()
+    {
+        cin>>b>>p>>k;
+        int temp=b;
+        b%=k;
+        cout<<temp<<"^"<<p<<" mod "<<k<<"="<<calculate(p)<<endl;
+        return 0;
+ }
+ 
+ 
+   14.   1328：【例7.7】光荣的梦想
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<algorithm>
+    #include<string>
+    #define INF 999999999
+    #define N 1000001
+    #define MOD 1000000007
+    using namespace std;
+    int n;
+    int a[N],b[N];
+    long long ans=0;
+    void msort(int left,int right)
+    {
+        int mid=(left+right)/2;
+        if(left>=right)
+            return ;
+        msort(left,mid);
+        msort(mid+1,right);//二分算法查找最小值 
+ 
+        int i=left,j=mid+1,n=mid,m=right,k=0;
+        while(i<=n&&j<=m)
+            if(a[i]>a[j])
+            {
+                ans+=n-i+1;
+                b[k++]=a[j++];
+            }
+            else
+                b[k++]=a[i++];
+        while(i<=n)
+            b[k++]=a[i++];
+        while(j<=m)
+            b[k++]=a[j++]; 
+        for(i=0;i<k;i++)
+            a[left+i]=b[i];
+    }
+    int main()
+    {
+        cin>>n;
+        for(int i=1;i<=n;i++)
+            cin>>a[i];
+        msort(1,n);
+        cout<<ans<<endl;
+        return 0;
+    }
+ 
+ 
+     15.   1234：2011
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<algorithm>
+    #include<string>
+    #define INF 999999999
+    #define N 500
+    #define MOD 1000000007
+    using namespace std;
+    char a[N];
+    int main()
+    {
+        int k;
+        cin>>k;
+        while(k--)
+        {
+            cin>>a;
+            int len=strlen(a);
+            int B=0,C=2011;
+            int i;
+ 
+            for(i=len-4;i<len;i++)
+                if(i>=0)
+                    B=B*10+a[i]-'0';
+            
+            i=1;
+            do{
+                if(i*2<=B)
+                {
+                    i*=2;
+                    C=(C*C)%10000;
+                }
+            }while(i*2<=B);
+            for(;i<B;i++)
+                C=(C*2011)%10000;
+            cout<<C<<endl;
+        }
+        return 0;
+    }
+    
+   
+      16.   1238：一元三次方程求解
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #define INF 999999999
+    #define N 50001
+    #define MOD 1000000007
+    #define E 1e-5
+    using namespace std;
+    double a,b,c,d;
+    double calculate(double x)//方程的计算 
+    {
+        double ans=0;
+        double y=1;
+     
+        for(int i=1;i<=3;i++)
+            y*=x;
+        y*=a;
+        ans+=y;
+     
+        y=1;
+        for(int i=1;i<=2;i++)
+            y*=x;
+        y*=b;
+        ans+=y;
+     
+        y=1;
+        y*=x;
+        y*=c;
+        ans+=y;
+     
+        ans+=d;
+        return ans;
+    }
+    int main()
+    {
+        double x=-100,x1,x2,x3;
+     
+        cin>>a>>b>>c>>d;
+        while(x-100<=E)//第一个实根 
+        {
+            if(fabs(calculate(x))<=E)
+                break;
+            x+=0.01;
+        }
+        x1=x;
+     
+        x+=0.01;
+        while(x-100<=E)//第二个实根 
+        {
+            if(fabs(calculate(x))<=E)
+                break;
+            x+=0.01;
+        }
+        x2=x;
+     
+        x+=0.01;
+        while(x-100<=E)//第三个实根 
+        {
+            if(fabs(calculate(x))<E)
+                break;
+            x+=0.01;
+        }
+        x3=x;
+        printf("%.2lf %.2lf %.2lf\n",x1,x2,x3);
+        return 0;
+    }
+ 
+ 
+      17.  1239：统计数字
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<cmath>
+    #include<string>
+    #define INF 999999999
+    #define N 1000001
+    #define MOD 1000000007
+    #define E 1e-5
+    using namespace std;
+    int a[N];
+    void quicksort(int left,int right)
+    {
+        int i=left,j=right,mid=a[(left+right)/2];
+        while(i<=j)
+        {
+            while(a[i]<mid)
+                i++;
+            while(a[j]>mid)
+                j--;
+            if(i<=j)
+            {
+                swap(a[i],a[j]);
+                i++;
+                j--;
+            }
+        }
+        if(i<right)
+            quicksort(i,right);
+        if(left<j)
+            quicksort(left,j);
+    }
+    int main()
+    {
+        int n;
+        int cnt=1;
+        cin>>n;
+        for(int i=1;i<=n;i++)
+            cin>>a[i];
+        quicksort(1,n);
+        while(cnt<=n)//当cnt不大于n时，开始循环 
+        {
+            int s=a[cnt],k=cnt; 
+            while(s==a[cnt])//每找到一个相同的数(包括自己本身)，cnt+1 
+                cnt++;
+            cout<<a[cnt-1]<<" "<<cnt-k<<endl;//用cnt-k来表示找到了多少相同的数 
+        }
+        return 0;
+    }
+    
+    
+  18.   1241：二分法求函数的零点
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #define INF 999999999
+    #define N 1000001
+    #define MOD 1000000007
+    #define E 1e-7
+    using namespace std;
+    double calculate(double x)//计算函数的值 
+    {
+        return x*x*x*x*x-15*x*x*x*x+85*x*x*x-225*x*x+274*x-121;
+    }
+    double myabs(double x){//计算数的绝对值 
+        if(x<0)return -x;
+        return x;
+    }
+    int main()
+    {
+        double left=1.5,right=2.4;
+        while(left+E<right)
+        {
+            double mid=(left+right)/2.0;
+            if(calculate(mid)>0)
+                left=mid;
+            else right=mid;
+        }
+        if(calculate(left)==0)
+            printf("%.6lf\n",left);
+        else
+            printf("%.6lf\n",left);
+        return 0;
+    }
 
+
+     19.   1245：不重复地输出数
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #define INF 999999999
+    #define N 1000001
+    #define MOD 1000000007
+    #define E 1e-3
+    using namespace std;
+    int a[N];
+    int main()
+    {
+        int n;
+        cin>>n;
+        for(int i=1;i<=n;i++)//读入数据 
+            cin>>a[i];
+        sort(a+1,a+1+n);//从小到大排序 
+        cout<<a[1];
+        for(int i=2;i<=n;i++)    
+            if(a[i]!=a[i-1])//判断前数是否相等,确保重复的数只输一次 
+                cout<<" "<<a[i];
+        cout<<endl;
+        return 0;
+    }
+    
+    
+    20.  1247：河中跳房子
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #define INF 999999999
+    #define N 1000001
+    #define MOD 1000000007
+    #define E 1e-12
+    using namespace std;
+    int l,n,m;
+    int a[N];
+    int judge(int x)
+    {
+        int i,dis=0,num=0;
+        for(int i=1;i<=n;i++)
+            if(a[i]-dis<x)
+                num++;
+            else
+                dis=a[i];
+        if(l-dis<x)
+            num++;
+        return num<=m;
+    }
+    int main()
+    {
+        int left,right,mid;
+        cin>>l>>n>>m;
+        for(int i=1;i<=n;i++)
+            cin>>a[i];
+        left=0;
+        right=l;
+        while(left+1<right)
+        {
+            mid=(left+right)/2;
+            if(judge(mid))
+                left=mid;
+            else
+                right=mid;
+        }
+        cout<<left<<endl;
+        return 0;
+    }
     
     
     
