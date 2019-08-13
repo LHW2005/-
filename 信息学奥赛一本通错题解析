@@ -1,0 +1,315 @@
+   1.     1314 【例3.6】过河卒（Noip2002）
+     #include<iostream>
+     using namespace std;
+     int n, m, cx, cy;
+     long long f[40][40], g[40][40];  //防止数据太大，最好使用long整型的数
+     int main()
+        {
+        cin>>n>>m>>cx>>cy;
+        f[0][0]=1;
+    
+        g[cx][cy]=1;  //将马所在的位置置成1
+        //以下是将马能攻击到的地方标记
+        if(cx-1>=0&&cy-2>=0)g[cx-1][cy-2]=1;
+        if(cx+1<=n&&cy-2>=0)g[cx+1][cy-2]=1;
+        if(cx-2>=0&&cy-1>=0)g[cx-2][cy-1]=1;
+        if(cx+2<=n&&cy-1>=0)g[cx+2][cy-1]=1;
+        if(cx-2>=0&&cy+1<=m)g[cx-2][cy+1]=1;
+        if(cx+2<=n&&cy+1<=m)g[cx+2][cy+1]=1;
+        if(cx-1>=0&&cy+2<=m)g[cx-1][cy+2]=1;
+        if(cx+1<=n&&cy+2<=m)g[cx+1][cy+2]=1;
+        
+        //将卒的可行走的地方标记
+        for(int i=1; i<=n; i++)
+          if(!g[i][0])f[i][0]=f[i-1][0];
+        for(int j=1; j<=m; j++)
+          if(!g[0][j])f[0][j]=f[0][j-1];
+          
+        //计算路径数量
+        for(int i=1; i<=n; i++)
+            for(int j=1; j<=m; j++)
+            {
+                //是否是可行走路径
+                if(g[i][j])f[i][j]=0;     //若不是则为0 
+                if(!g[i][j])f[i][j]=f[i][j-1]+f[i-1][j];  //若是则将路径数增加
+            }
+            
+        cout<<f[n][m];
+        return 0;
+}
+
+
+   2.    1315：【例4.5】集合的划分
+   
+    #include<iostream>
+    #include<cstring>
+    using namespace std;
+    long long s(int n,int k) 
+    {
+        if((n<k)||(k==0)) return 0;    
+        if((k==1)||(k==n)) return 1;
+        return s(n-1,k-1)+k*s(n-1,k);    //如果an是k的一个子集，那么将 a1,a2,a3--an-1划分为k-1个子集，数量有s(n-1,k-1)个
+                                         //如果an不是k的一个子集，那么an必然与其它数构成子集，则可以a1,a2...an划为k个子集，此时有s(n-1,k)种可能
+                                         然后将an加入k个子集中的任意一个，所以有k*s(n-1,k)种可能。
+                                         
+    }
+    int main()
+    {
+        int n,k;
+        cin>>n>>k;
+        cout<<s(n,k)<<endl;
+        return 0;
+    }
+    
+    
+    3，   1203：扩充匹配问题
+       #include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib》
+using namespace std；
+int main()
+{
+    string a;
+    while(cin>>a)    //如果有输入，将会一直进行
+    {
+        int m=0;      //代表左括号的个数
+        char b[102];  //用于存储？$‘ ’
+        int c[102];   //用于存下左括号的下标值
+        int l=a.size();
+        for(int i=0;i<l;i++)
+        {
+            if(a[i]=='(')
+            {
+                c[m]=i;
+                m++;   //左括号的个数＋1
+                b[i]=' ';
+            }
+           else if(a[i]==')'&&m<=0)   //前面没有左括号的时候
+            {
+               b[i]='?';
+                //cout<<i;
+            }
+           else if(a[i]==')'&&m!=0){   //前面有左括号
+                m--;
+                b[i]=' ';
+           }
+           else
+               b[i]=' ';
+        }
+        for(int i=0;i<m;i++)
+            b[c[i]]='$';
+        b[l]='\0';
+        cout<<a<<endl;
+        cout<<b<<endl;
+    }
+    return 0;
+}
+
+
+ 4.   1208：2的幂次方表示
+ 
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #define N 1000010
+    using namespace std;
+    void calculate(int n,int step)
+    {
+        if(n==0)        
+            return;
+        calculate(n/2,step+1);     
+        if(n%2)
+       {
+            if(n/2)
+                cout<<"+";
+            if(step==1)
+                cout<<"2";
+            else
+            {
+                cout<<"2(";
+                if(step==0)
+                    cout<<"0";
+                else
+                    calculate(step,0);
+                 cout<<")";
+            }
+        }
+    }
+    int main()
+    {
+        int n;
+        cin>>n;
+        calculate(n,0);
+        cout<<endl;
+        return 0;
+    }
+    
+    
+5.   1211判断元素是否存在
+    #include<bits/stdc++.h>
+    using namespace std;
+    bool f(int k,int x)
+    {
+        if(k==x)
+            return true;
+        if(k>x)
+           return false;
+        return f(3*k+1,x)||f(2*k+1,x); //当看k<x时，不断增大k值，直到与x相等。 
+    }
+    int main()
+    {
+        int k,x;
+        scanf("%d,%d",&k,&x);
+        if(f(k,x))
+            cout<<"YES"<<endl;
+        else
+            cout<<"NO"<<endl;
+        return 0;
+    }
+    
+    
+    
+  6.   1212：LETTERS
+    #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #define N 30
+    using namespace std;
+    int r,s;
+    char a[N][N];
+    int vis[N][N];
+    int num[26];
+    int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};//走的方式（向前，向后，向左，向右） 
+    int maxx=0;
+    void dfs(int x,int y,int step)//最多能走过的不同的字母的个数 
+    {
+        if(maxx<step)//更新最大值 
+            maxx=step;
+        for(int i=0;i<4;i++) 
+        {
+            int nx=x+dir[i][0];//走法（前后） 
+            int ny=y+dir[i][1];//走法（左右） 
+            if(nx>=0&&nx<r&&ny>=0&&ny<s&&vis[nx][ny]==0&&num[a[nx][ny]-'A']==0)//判断是否是走过的字母 
+            {
+                vis[nx][ny]=1;     
+                num[a[nx][ny]-'A']=1;//将此字母做好标记 
+                dfs(nx,ny,step+1);//走下一步 
+                vis[nx][ny]=0; 
+                num[a[nx][ny]-'A']=0; //重置数据，准备开始下一轮循环 
+            }
+        }
+    }
+    int main()
+    {
+        cin>>r>>s;
+        for(int i=0;i<r;i++)
+            for(int j=0;j<s;j++)
+                cin>>a[i][j];
+        num[a[0][0]-'A']=1;
+        vis[0][0]=1; //将初始值标记 
+        dfs(0,0,1);
+        cout<<maxx<<endl;
+        return 0;
+}
+
+     7.   1216：红与黑
+     #include<iostream>
+    #include<cstdio>
+    #include<cstdlib>
+    #include<cstring>
+    #define N 1001
+    using namespace std;
+    int m,n;
+    char ch;
+    int maps[N][N];
+    int vis[N][N];
+    int dir[4][2]={{0,1},{0,-1},{1,0},{-1,0}};//走的方式（向前，向后，向左，向右） 
+    int cnt;
+    void dfs(int x,int y)//能到达的最多瓷砖数 
+    {
+        for(int i=0;i<4;i++)//循环选出下一步的走法 
+        {
+            int nx=x+dir[i][0];
+            int ny=y+dir[i][1];//读入走法 
+            if(nx>=1&&ny>=1&&nx<=n&&ny<=m&&vis[nx][ny]==0&&maps[nx][ny]==1)//判断判断走法是否满足边界值 
+            {
+                vis[nx][ny]=1;//标记这块瓷砖 
+                cnt++;//更新瓷砖数量 
+                dfs(nx,ny);//开始下一步 
+            }
+        }
+    }
+    int main()
+    {
+        while(scanf("%d%d",&m,&n)!=EOF&&m&&n)//读入数据 
+        {
+            int x,y;
+            cnt=1;
+            memset(vis,0,sizeof(vis));
+            memset(maps,0,sizeof(maps)); //将所有标记清空 
+ 
+            for(int i=1;i<=n;i++)
+                for(int j=1;j<=m;j++)//循环读入数据 
+                {
+                    cin>>ch;
+                    if(ch=='@')
+                    {
+                        x=i;
+                        y=j;
+                        maps[i][j]=1;
+                    }
+                    if(ch=='.')
+                        maps[i][j]=1; 
+                    if(ch=='#')
+                        maps[i][j]=0;//将所有黑瓷砖标记为1（包括初始位置），红瓷砖记为0 
+                }
+            vis[x][y]=1;
+            dfs(x,y);
+            cout<<cnt<<endl;
+        }
+        return 0;
+    }
+    
+    8.   1217：棋盘问题
+     
+
+  
+ 
+
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+      
+
+
+	
+         
