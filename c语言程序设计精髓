@@ -1,0 +1,123 @@
+    结构体
+       结构体指针
+       例：
+       typedef struct student{
+           long studentID;
+           char studentName[10];
+           char studentSex;
+           DATE birthday;
+           int score[4];
+       }STUDENT;
+       typedef struct date
+       {
+           int year;
+           int month;
+           int day;
+       }DATE;
+       
+           ·如何定义指向结构体变量的指针？
+             STUDENT stu1;
+             STUDENT *p1;
+             pt=&stu1;
+               等价于
+             STUDENT *pt=&stu1;
+             
+            ·如何访问结构体指针变量指向的结构体成员呢？
+            ·通过成员选择运算符访问
+              stu1.studentID=1;
+              (*pt).studentID=1;
+            
+            ·通过指向运算符访问
+              ·pt->studentID=1;
+              ·当结构体嵌套时，如何访问结构体指针变量指向的结构体成员？
+              stu1.birthday.year=1999;
+              (*pt).birthday.year=1999;
+              pt->birthday.year=1999;
+              
+            ·如何定义指向结构体数组的指针？
+                STUDENT stu[30];
+                STUDENT *pt;
+                pt=stu;
+                等价于
+                STUDENT *pt=stu;
+                等价于
+                STUDENT *pt=&stu[0];
+                
+              ·如何访问结构体变量指针指向的结构体数组成员
+              STUDENT stu[30];
+              STUDENT *pt=stu;
+              pt=&stu[];
+              pt->studentID
+              等价于（*pt）.studentID
+              stu[0].studentID
+              
+              ·pt++是什么意思？
+                指向数组下一个成员的地址
+                
+                
+        向函数传递结构体
+              ·向函数传递结构体的单个成员
+                  *复制结构体的所有成员
+              ·向函数传递结构体的完整结构
+                  *复制结构体的所有成员（函数对结构体内容的修改不影响原结构体）
+              ·向函数传递结构体的首地址
+                  *仅复制一个地址（函数对结构体的修改影响原结构体）
+                
+             封装函数参数
+                好处：精简参数个数
+                     使函数接口更简洁
+                     可扩展性好
+                     （用定义全局变量来精简函数个数得不偿失）
+                
+            ·向函数传递结构体的完整结构
+                  *复制结构体的所有成员
+                  ·复制整个结构体成员的内容，一组数据
+                  ·参数传递值观，但开销大，效率低
+                  ·函数内对结构内容的修改不影响原结构体
+                  
+            ·向函数传递结构体的首地址
+                ·用结构体函数组/结构体指针作函数参数
+                ·仅复制结构体的首地址，一个数据
+                ·参数传递效率高
+                ·可修改结构体指针所指向的结构体的内容
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
