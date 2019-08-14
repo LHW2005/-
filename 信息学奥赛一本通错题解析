@@ -889,13 +889,525 @@ int main()
         return 0;
     }
 
-    
-    
-    
-    
-    
-    
 
+     23.   1266：【例9.10】机器分配
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 30
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int a[N][N],f[N][N],res[N][N];
+    void print(int x,int y)//具体输出分机器人的方案 
+    {
+        if(x==0)
+            return;
+        print(x-1,y-res[x][y]);//递归输入 
+        printf("%d %d\n",x,res[x][y]);
+    }
+    int main()
+    {
+        int n,m;
+        cin>>n>>m;
+        for(int i=1;i<=n;i++)//读入数据 
+            for(int j=1;j<=m;j++)
+                cin>>a[i][j];
+ 
+        for(int i=1;i<=n;i++)
+            for(int j=1;j<=m;j++)
+                for(int k=0;k<=j;k++)
+                    if(f[i][j]<=f[i-1][j-k]+a[i][k])//判断多给机器给一家公司好，还是把机器给别的公司好 
+                    {
+                        f[i][j]=f[i-1][j-k]+a[i][k];//更新最高利润 
+                        res[i][j]=k;// 记下这个方案 
+                    }
+ 
+       cout<<f[n][m]<<endl;
+        print(n,m);
+ 
+       return 0;
+    } 
+    
+     24.  1282：最大子矩阵
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 1001
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int a[N][N],f[N];
+    int maxArray(int t[],int n)//计算出最大区域的值 
+    {
+        int sum=0,maxx=-INF;
+        for(int i=1;i<=n;i++) 
+        {
+            if(sum>0)
+                sum+=t[i];
+            else
+                sum=t[i];
+            if(sum>maxx)
+                maxx=sum;
+        }
+    
+        return maxx;
+    }
+    int main()
+    {
+        int n;
+        cin>>n;
+        for(int i=1;i<=n;i++)
+            for(int j=1;j<=n;j++)//读入数据 
+                cin>>a[i][j];
+ 
+        int maxx=-INF;
+        for(int i=1;i<=n;i++)
+        {
+            memset(f,0,sizeof(f));//清空数据 
+            for(int j=i;j<=n;j++)
+            {
+                for(int k=1;k<=n;k++)
+                    f[k]+=a[j][k];//开始累加 
+ 
+                int temp=maxArray(f,n); 
+                if(temp>maxx)//选出最大值 
+                    maxx=temp;
+            }
+        }
+ 
+        cout<<maxx<<endl;
+ 
+        return 0;
+    } 
+     25.   1286：怪盗基德的滑翔翼
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 1001
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int a[N],f[N];
+    int main()
+    {
+        int t;
+        cin>>t;
+        while(t--)
+        {
+            int n;
+            cin>>n;
+            for(int i=1;i<=n;i++)
+                cin>>a[i];
+     
+            int maxx1=-INF,maxx2=-INF;
+            for(int i=1;i<=n;i++)
+            {
+                f[i]=1;
+                for(int j=1;j<i;j++)
+                    if(a[j]>a[i]&&f[j]+1>f[i])//计算从第一个开始的经过的最多的楼数 
+                        f[i]=f[j]+1;
+                    maxx1=max(maxx1,f[i]);
+           }
+            for(int i=n;i>=1;i--)
+            {
+                f[i]=1;
+                for(int j=n;j>i;j--)
+                    if(a[j]>a[i]&&f[j]+1>f[i])//计算从最后一个开始的经过的最多楼数 
+                        f[i]=f[j]+1;
+                maxx2=max(maxx2,f[i]);
+        }
+            
+            int res=max(maxx1,maxx2);
+            cout<<res<<endl;
+        }
+        return 0;
+    }
+    
+    
+      26.   1287：最低通行费
+      #include<iostream>
+      #include<cstdio>
+      #include<cstring>
+      #include<cmath>
+      #include<algorithm>
+      #include<string>
+      #include<cstdlib>
+      #include<queue>
+      #include<vector>
+      #define INF 0x3f3f3f3f
+      #define PI acos(-1.0)
+      #define N 1001
+      #define MOD 2520
+      #define E 1e-12
+      using namespace std;
+      int a[N][N],f[N][N];
+      int main()
+      {
+          int n;
+          cin>>n;
+          for(int i=1;i<=n;i++)
+              for(int j=1;j<=n;j++)
+                  cin>>a[i][j];
+ 
+          f[1][1]=a[1][1];
+          for(int i=2;i<=n;i++)
+              f[i][1]=f[i-1][1]+a[i][1];//算出向下走的所有的值并储存 
+          for(int j=2;j<=n;j++)
+              f[1][j]=f[1][j-1]+a[1][j];//算出向左走的所有的值并储存 
+ 
+          for(int i=2;i<=n;i++)
+              for(int j=2;j<=n;j++)
+                  f[i][j]=min(f[i-1][j],f[i][j-1])+a[i][j];//比较出向下走还是向右走省钱 
+ 
+          cout<<f[n][n]<<endl;
+ 
+          return 0;
+      }
+      
+      
+       27.   1267：【例9.11】01完全背包问题
+      #include<iostream>
+      #include<cstdio>
+      #include<cstring>
+      #include<cmath>
+      #include<algorithm>
+      #include<string>
+      #include<cstdlib>
+      #include<queue>
+      #include<vector>
+      #define INF 0x3f3f3f3f
+      #define PI acos(-1.0)
+      #define N 1001
+      #define MOD 2520
+      #define E 1e-12
+      using namespace std;
+      int m,n;
+      int w[N],c[N],f[N];
+      void CompletePack(int cost,int weight)//算出当前价值最大的值 
+      {
+          for(int v=weight;v<=m;v++)
+              f[v]=max(f[v],f[v-weight]+cost);    
+      }
+ 
+      int main()
+      {
+          cin>>m>>n;
+          for(int i=1;i<=n;i++)//读入数据 
+              cin>>w[i]>>c[i];
+          for(int i=1;i<=n;i++) 
+              CompletePack(c[i],w[i]);
+          cout<<"max="<<f[m]<<endl;
+          return 0;
+      }
+    
+     29.   1270：【例9.14】混合背包
+    #include<bits/stdc++.h>
+    using namespace std;
+    int cost[555],value[555],num[555];
+    int dp[6666];
+    int main(){
+        int n,m;
+        cin>>m>>n;
+        for(int i=1;i<=n;i++){
+            cin>>cost[i]>>value[i]>>num[i];
+        }
+        for(int i=1;i<=n;i++){
+            if(num[i]==0){//当可以取无限次时 
+                for(int j=cost[i];j<=m;j++){
+                    dp[j]=max(dp[j],dp[j-cost[i]]+value[i]);//在背包体积之内，找出最有价值的方案 
+                }
+            }else{//不能取无限次时 
+                for(int j=1;j<=num[i];j++){ //记录是否超过了物品可取的次数 
+                    for(int k=m;k>=cost[i];k--){
+                        dp[k]=max(dp[k],dp[k-cost[i]]+value[i]);//找出最有价值的方案 
+                    }
+                }
+            }
+        }
+        cout<<dp[m]<<endl;
+        return 0;
+    }
+
+
+     30.   1272：【例9.16】分组背包
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 1001
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int v,n,t;
+    int group[N][N],w[N],c[N],f[N];
+    void GroupPack(int groupp,int num)
+    {
+        for(int j=v;j>=0;j--)
+            for(int k=1;k<=groupp;k++)//每小组选一个 
+            {
+                int q=group[num][k];//物品序号
+                cout<<j<<endl;
+                if(j>=w[q])
+                    f[j]=max(f[j],f[j-w[q]]+c[q]);//选出价值最大的物品 
+            }
+     }
+    int main()
+    {
+        int p;
+        cin>>v>>n>>t;
+        for(int i=1;i<=n;i++)
+        {
+            cin>>w[i]>>c[i]>>p;
+            group[p][++group[p][0]]=i;//group[p][0]存储p组元素个数
+        }
+ 
+        for(int i=1;i<=t;i++)
+            GroupPack(group[i][0],i);
+        cout<<f[v]<<endl;
+        return 0;
+    }
+     31.   1291：数字组合
+    #include<stdio.h>
+    #include<iostream>
+    #include<string.h>
+    #define inf 0x3f3f3f3f
+    using namespace std;
+    int main()
+    {   
+	    long long n,t,a[10005],dp[10005],i,j;
+	    while(scanf("%lld %lld",&n,&t)!=EOF)
+	    {
+	        memset(dp,0,sizeof(dp)); 
+		    dp[0]=1;
+		    for(i=1;i<=n;i++)
+		        scanf("%d",&a[i]);
+	            for(i=1;i<=n;i++)
+		    {
+			
+			    for(j=t;j>=a[i];j--){//不同点，逆序
+			        dp[j]+=dp[j-a[i]];//找出方式的数目 
+			        cout<<dp[j]<<" ";
+		        }
+		    }
+		    printf("%lld\n",dp[t]);
+	    }
+    }
+       32.   1296：开餐馆
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 1001
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int w[N],c[N],f[N];
+    int main()
+    {
+        int t;
+        cin>>t;
+        while(t--)
+        {
+            int n,k;
+            cin>>n>>k;
+            for(int i=1;i<=n;i++)//读入数据（开店的地点） 
+                cin>>w[i];
+            for(int i=1;i<=n;i++)//读入利润 
+            {
+                cin>>c[i];
+                f[i]=c[i];
+            }
+ 
+            for(int i=1;i<=n;i++)
+                for(int j=1;j<=n;j++)
+                    if(w[i]-w[j]>k)//当两家店距离相差k以上时 
+                        f[i]=max(f[i],f[j]+c[i]);//->选出是这两家店利润大，还是其他的选择更好 
+ 
+            int maxx=-INF;
+            for(int i=1;i<=n;i++)//比较哪种方案更好 
+                maxx=max(f[i],maxx);
+            cout<<maxx<<endl;
+        }
+        return 0;
+    } 
+    
+    
+      33.   1274：【例9.18】合并石子
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 101
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int sum[N],f[N][N];
+   int main()
+    {
+        int n,a;
+        memset(f,INF,sizeof(f));
+     
+        cin>>n;
+        sum[0]=0;
+        for(int i=1;i<=n;i++)
+       {
+            cin>>a;
+            sum[i]=sum[i-1]+a;
+        }
+        for(int i=1;i<=n;i++)
+            f[i][i]=0;
+        for(int i=n;i>=1;i--)
+            for(int j=i+1;j<=n;j++)
+                for(int k=i;k<=j-1;k++)
+                    f[i][j]=min(f[i][j],f[i][k]+f[k+1][j]+sum[j]-sum[i-1]);
+        cout<<f[1][n]<<endl;
+        return 0;
+    } 
+    
+    
+     34.   1277：【例9.21】方格取数
+/*思路
+
+考虑两个人同时从A出发，则需考虑两个人到达任意两个格子(i1，j1)与(i2，j2)的情况，显然要到达这两个格子，其前一状态必为(i1-1，j1)，(i2-1，j2)；(i1-1，j1)，(i2，j2-1)；(i1，j1-1)，(i2-1，j2)；(i1，j1-1)，(i2，j2-1) 四种情况之一。
+于是，可以推出动态转移方程：
+f[i][j][k][s]=max(max(f[i?1][j][k?1][s],f[i?1][j][k][s?1]),max(f[i][j?1][k][s?1],f[i][j?1][k?1][s]))+a[i][j]+a[k][s];
+
+f[i][j][k][s]=max(max(f[i?1][j][k?1][s],f[i?1][j][k][s?1]),max(f[i][j?1][k][s?1],f[i][j?1][k?1][s]))+a[i][j]+a[k][s];
+但是，我们要处理一下，如果这两条路线走在了一起，就只算一次。
+代码
+*/
+#include<cstdio>
+#include<iostream>
+using namespace std;
+int n,a[11][11],f[11][11][11][11];//初始化
+int main()
+{
+	scanf("%d",&n);//输入
+	int he,ha,ho;//初始化
+	scanf("%d%d%d",&he,&ha,&ho);//输入
+	while(he!=0&&ha!=0&&ho!=0)//判断是否结束
+	{
+		a[he][ha]=ho;//标记
+		scanf("%d%d%d",&he,&ha,&ho); //持续输入
+	}
+	for(register int i=1;i<=n;i++)//枚举第一条路线的列
+	for(register int j=1;j<=n;j++)//枚举第一条路线的行
+	for(register int k=1;k<=n;k++)//枚举第二条路线的列
+	for(register int s=1;s<=n;s++)//枚举第二条路线的行
+	{
+		f[i][j][k][s]=max(max(f[i-1][j][k-1][s],f[i-1][j][k][s-1]),max(f[i][j-1][k][s-1],f[i][j-1][k-1][s]))+a[i][j]+a[k][s];//动态转移方程
+		if(i==k&&s==j) f[i][j][k][s]-=a[i][j];//处理走在一起的情况
+	}
+	printf("%d",f[n][n][n][n]);//输出
+	return 0;
+}
+
+     35.   1279：【例9.23】橱窗设置（flower）
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 
