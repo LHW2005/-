@@ -1349,12 +1349,385 @@ int main()
 }
 
      35.   1279：【例9.23】橱窗设置（flower）
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 101
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int a[N][N],b[N][N],c[N][N],d[N];
+    int main()
+    {
+        int f,v;
+        cin>>f>>v;
+        for(int i=1;i<=f;i++)
+            for(int j=1;j<=v;j++)
+                cin>>a[i][j];
+ 
+        memset(b,128,sizeof(b));
+        for(int i=1;i<=v-(f-1);i++)
+            b[1][i]=a[1][i];
+        for(int i=1;i<=f;i++)
+            for(int j=i;j<=v-(f-i);j++)
+                for(int k=i-1;k<=j-1;k++)
+                    if(b[i][j]<b[i-1][k]+a[i][j])//读入美学值 
+                    {
+                        b[i][j]=b[i-1][k]+a[i][j];
+                        c[i][j]=k;
+                    }
+ 
+        int maxx=-INF;
+        int temp;
+        for(int i=f;i<=v;i++)
+            if(b[f][i]>maxx)//选出美学值最大的组合 
+            {
+                maxx=b[f][i];
+                temp=i;
+            }
+        cout<<maxx<<endl;//输入这个组合的美学值 
+ 
+        for(int i=f;i>=1;i--)
+        {
+            d[f-(i-1)]=temp;
+            temp=c[i][temp];
+        }
+  
+        for(int i=f;i>=1;i--)
+            cout<<d[i]<<" ";//输入花瓶号码 
+        return 0;
+    }
+
+
+     36.   1280：【例9.24】滑雪
+    #include <iostream>
+    #include <cstdio>
+    #include <cstring>
+    using namespace std;
+    #define M 500
+    #define INF 0x3f3f3f3f
+    int f[M][M];
+    int r, c, map[M][M], ans;
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
+     
+    int dfs(int x, int y)
+    {
+        if(f[x][y]) return f[x][y];
+        int maxx = 1;
+        int step = 0;
+        for(int i = 0; i < 4; i++) {//输入走法 
+            int xx = x + dx[i];
+            int yy = y + dy[i];
+            step = 0;
+            if(xx <= 0 || xx > r || yy <= 0 || yy > c) continue; 
+            if(map[xx][yy] < map[x][y]) step = dfs(xx, yy) + 1;//将不同的可能性存入step中 
+            maxx = max(maxx, step);//选出最长滑坡 
+        }
+        f[x][y] = maxx;
+        return f[x][y];
+    }
+     
+    int main() {
+        scanf("%d%d", &r, &c);
+        for(int i = 1; i <= r; i++)
+            for(int j = 1; j <= c; j++) scanf("%d", &map[i][j]);
+        for(int i = 1; i <= r; i++)
+            for(int j = 1; j <= c; j++) {
+                f[i][j] = dfs(i, j);
+                ans = max(ans, f[i][j]);
+            }
+        printf("%d\n", ans);
+        return 0;
+    } 
+    
+     37.   1298：计算字符串距离
+     /*
+    状态转移方程：f[i][j]表示ai与bj的最优编辑距离。
+
+    首先f[i][0]和f[0][i]都初始化为i，插入和删除的步数
+
+    如果a[i]=b[j]那么f[i][j]=f[i-1][j-1]（不动）
+
+    否则f[i][j]=min(min(f[i-1][j],f[i][j-1])(插入，删除),f[i-1][j-1](把一个字符改成另一个字符))+1
+    */
+
+    #include <cstdio>
+    #include <algorithm>
+    #include <cstring>
+    using namespace std;
+    char s1[2001],s2[2001]; int f[2001][2001],n,t,m;
+    int main(){
+    scanf("%d",&t);
+    while (t--){
+        scanf("%s%s",s1,s2); n=strlen(s1); m=strlen(s2);
+        memset(f,0,sizeof(f));
+        for (int i=1;i<=n;i++) f[i][0]=i;//初始化
+        for (int i=1;i<=m;i++) f[0][i]=i;//初始化
+        for (int i=1;i<=n;i++)
+        for (int j=1;j<=m;j++)
+        if (s1[i-1]==s2[j-1]) f[i][j]=f[i-1][j-1];//相等则不变    
+        else f[i][j]=min(min(f[i-1][j],f[i][j-1]),f[i-1][j-1])+1;//否则步数+1
+        printf("%d\n",f[n][m]); }return 0;
+    }
+
+    
+     38.   1300：鸡蛋的硬度
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 1001
+    #define MOD 2520
+    #define E 1e-12
+    using namespace std;
+    int f[110][20];
+    int main()
+    {
+        int n,m;
+        while(scanf("%d%d",&n,&m)!=EOF)
+        {
+            for(int i=1;i<=n;i++)
+                for(int j=1;j<=m;j++)
+                    f[i][j]=i;
+ 
+            for(int i=1;i<=n;i++)
+                for(int j=1;j<=i;j++)
+                    for(int k=2;k<=m;k++)
+                        f[i][k]=min(f[i][k],max(f[j-1][k-1],f[i-j][k])+1);
+  
+            cout<<f[n][m]<<endl;
+        }
+        return 0;
+   }
+        39.   1302：股票买卖
+    #include<iostream>
+    #include<cstdio>
+    #include<cstring>
+    #include<cmath>
+    #include<algorithm>
+    #include<string>
+    #include<cstdlib>
+    #include<queue>
+    #include<vector>
+    #define INF 0x3f3f3f3f
+    #define PI acos(-1.0)
+    #define N 100001
+    #define MOD 100001
+    #define E 1e-12
+    using namespace std;
+    int a[N],f1[N],f2[N];
+    int main()
+    {
+        int t,ans;
+        scanf("%d",&t);
+        while(t--)
+        {
+            int n;
+            scanf("%d",&n);
+            for(int i=1;i<=n;i++)
+                scanf("%d",&a[i]);//读入数据 
+  
+            int minn=INF,maxx=-INF;
+            f1[0]=0;
+            f2[n+1]=0;
+            for(int i=1;i<=n;i++)
+            {
+                minn=min(minn,a[i]); 
+                f1[i]=max(f1[i-1],a[i]-minn);//正序枚举选出所有可能性中利益最大的一个 
+            }
+            cout<<endl;
+            for(int i=n;i>=1;i--)
+            {
+                maxx=max(maxx,a[i]);
+                f2[i]=max(f2[n+1],maxx-a[i]);//倒叙枚举选出所有可能性种利益最大的一个
+            }
+ 
+            int ans=-INF;
+            for(int i=1;i<=n;i++)
+                ans=max(ans,f1[i]+f2[i]);
+            printf("%d\n",ans);
+        }
+        return 0;
+    }
+     40.   1305：Maximum sum
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#define maxn 50005
+int lsum[maxn];
+int rsum[maxn];
+
+int t,n;
+int a[maxn];
+using namespace std;
+int main()
+{
+    scanf("%d",&t);
+    while(t--)
+    {
+	    memset(lsum,0,sizeof(lsum));
+        memset(rsum,0,sizeof(rsum));
+        scanf("%d",&n);
+        for(int i=1;i<=n;i++)
+            scanf("%d",&a[i]);
+        lsum[1]=a[1];
+        for(int i=2;i<=n;i++)
+            if(lsum[i-1]>0)
+            lsum[i]=lsum[i-1]+a[i];
+        else
+            lsum[i]=a[i];
+        rsum[n]=a[n];
+        for(int i=n-1;i>=1;i--)
+            if(rsum[i+1]>0)
+            rsum[i]=rsum[i+1]+a[i];
+        else
+            rsum[i]=a[i];
+        int maxx=-10000000;
+        int maxl=-10000000;
+        for(int i=1;i<n;i++)
+        {
+            if(lsum[i]>maxx)
+                maxx=lsum[i];
+            if(rsum[i+1]+maxx>maxl)
+                maxl=maxx+rsum[i+1];
+
+        }
+        printf("%d\n",maxl);
+    }
+    return 0;
+}
+     41.   1306：最长公共子上升序列
+    #include<cstdio>
+    #include<iostream>
+    #include<cstring>
+    using namespace std;
+    int b[501][501],b2[501][501],f[501][501],a1[501],a2[501],max1,max2,m1,m2;
+    bool ok[501][501];
+    void print(int x,int y)
+    {
+        if (b[x][y]==0 && b2[x][y]==0 || x<=0 || y<=0) {printf("%d ",a1[x]);return;}
+        print(x-b[x][y],y-b2[x][y]);
+        printf("%d ",a1[x]);
+    }//输出序列
+    int main()
+    {
+        scanf("%d",&m1);
+        for (int i=1;i<=m1;i++) scanf("%d",&a1[i]);
+        scanf("%d",&m2);
+        for (int i=1;i<=m2;i++) scanf("%d",&a2[i]); 
+        //输入
+        for (int i=1;i<=m1;i++)//枚举第一个序列开头
+        {
+          for (int j=1;j<=m2;j++)//枚举第二个开头
+          {
+            f[i][j]=1;//改变
+            if (f[i][j]<f[i-1][j])
+            {
+              f[i][j]=f[i-1][j];
+              b[i][j]=1;
+
+
+              b2[i][j]=0;
+            }//判断路径输出
+            if (f[i][j]<f[i][j-1])
+            {
+              f[i][j]=f[i][j+1];
+              b[i][j]=0;
+              b2[i][j]=1;
+            }//判断路径输出
+            if (a1[i]==a2[j])//开头相同
+            {
+              for (int k=1;k<i;k++)
+                for (int k2=1;k2<j;k2++)//往下枚举
+                {
+                  if (f[i][j]<=f[i-k][j-k2]+1 && a1[i]>a1[i-k] && a1[i-k]==a2[j-k2])
+                  {
+                    f[i][j]=f[i-k][j-k2]+1;//动态转移
+                    b[i][j]=k;
+                    b2[i][j]=k2;//记录过程
+                  }
+                }
+              if (f[max1][max2]<f[i][j]) {max1=i;max2=j;}//改变最大值
+             }
+            else {ok[i][j]=true;}//输出防止输出没有的数
+          }
+        }
+        printf("%d\n",f[max1][max2]);
+
+        if (f[max1][max2]!=0)
+        {
+            print(max1,max2);
+        }
+    }
     
     
     
     
-    
-    
+42.   1322：【例6.4】拦截导弹问题(Noip1999)
+    #include<iostream> 
+    #include<cstring>
+    #define MAXN 1000
+    using namespace std;
+    int a[MAXN+10];//导弹飞来时的高度 
+    int l[MAXN+10];//拦截导弹最低高度 
+    int main()
+    {
+	    memset(a,0,sizeof(a));
+	    memset(l,0,sizeof(l));
+	    int n=1;
+	    while(cin>>a[n])
+	    {
+	    	n++;
+	    }
+	    int k=1;//拦截导弹系统数
+	    int p,j=1;
+	    l[k]=a[1]; 
+	    for(int i=2;i<=n;i++) 
+	    {
+		    p=0;//注意每次循环时需要p=0 
+		    for(int j=1;j<=k;j++)//注意，j<=k 
+		    {
+			    if(l[j]>=a[i])
+			    {
+				    if(p==0) p=j;
+				    else if(l[p]>l[j]) p=j;//如果同时满足例如l[1]=155>65,l[2]=158>65,
+				    //则应该应将最小值赋值给最小拦截系统 
+			    }
+		    }
+		    if(p==0)
+		    {
+			    k++;//如果发现a[i]>l[j],则应该增加一个系统 
+			    l[k]=a[i];//更新新系统的最小值 
+		    }
+		    else l[p]=a[i];//更新原系统的拦截最小值 
+	    }
+	    cout<<k<<endl;
+	    return 0;
+    }
+    /*例如有8个导弹，高度分别是： 389 207 155 | 300 299 170 158 65
+    ‘|’之前是系统1的范围，‘|’后面是系统2的范围
+    如上代码，
+    因为l[1]=>389=>207=>155  l[1]=155<300，所以 k++(系统数加一),l[2]=300=>299=>170=>158
+    当l[1]=155>65
+      l[2]=158>65时
+      min(l[1],l[2])=65;*/
     
     
     
