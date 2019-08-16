@@ -1731,10 +1731,146 @@ int main()
     
     
     
+    1223：An Easy Problem
+        #include<iostream>
+        #include<cstdio>
+        #include<cstdlib>
+        #include<cstring>
+        #include<algorithm>
+        #define INF 999999999
+        #define N 1001
+        using namespace std;
+        int main()
+        {
+            int n;
+            while(scanf("%d",&n)!=EOF&&n)
+            {
+                int cnt=0;
+                int temp=n;
+                while(temp>0)
+                {
+                    if(temp%2)
+                        cnt++;
+                    temp/=2;
+                }//将读入的数据化为2进制的1的个数求出 
+                int sum=0;
+                while(1)
+                {
+                    temp=++n;
+                    while(temp>0)
+                    {
+                        if(temp%2)
+                            sum++;
+                        temp/=2;
+                    }//从n+1开始，判断有木有1的数量与n相同的，没有开始下一个 
+                   if(cnt==sum)
+                   {
+                        cout<<n<<endl;
+                        break;
+                    }
+                    sum=0;
+                }
+    }
+    return 0;
+}
     
     
     
-    
+44.    1224：最大子矩阵    
+ #include<bits/stdc++.h>
+ using namespace std;
+ int a[101][101];
+ int main() 
+ {
+     int n,max=-1;cin>>n;
+     for(int i=1;i<=n;i++)
+     {
+         for(int j=1;j<=n;j++)
+         {
+             cin>>a[i][j];
+             a[i][j]+=a[i][j-1];
+         }
+     }
+
+
+     for(int i=0;i<n;i++)
+     {
+         for(int j=i+1;j<=n;j++)
+         {
+             int ans=0;
+
+
+             for(int k=1;k<=n;k++)
+             {
+
+      ans+=a[k][j]-a[k][i];
+                 if(ans>max)max=ans;
+                 if(ans<0)ans=0;
+             }
+         }
+     }
+     cout<<max;
+     return 0;
+ }
+
+
+     45.   1225：金银岛
+    #include<iostream>
+    #include<cstring>
+    #include<iomanip>
+    #include<algorithm>//sort函数用到 
+    using namespace std;
+    struct js //定义结构体，金属 
+    {
+    	    int zl;//重量
+	    int v;//总价值
+	    double dj;//单价，每克金属值多少钱 
+    } a[10001];
+    int k,w,s,i,j,yw;//yw是已经拿了的金属重量和 
+    double zj;//zj是已经拿的所有金属的价值和 
+    bool cmp(js x,js y)
+    {
+         	return x.dj>y.dj;
+    }
+    int main()
+    {
+	    cin>>k;
+	    while(k>0)
+	    {
+		    memset(a,0,sizeof(a));
+		    cin>>w>>s;
+		    for(int i=1;i<=s;i++)
+		    {
+			    cin>>a[i].zl>>a[i].v;
+			    a[i].dj=(a[i].v*1.0)/a[i].zl;
+  		    }
+		    //对金属进行排序，按照单价从高到低排序
+		    //因为拿金属首先拿最值钱的，拿完一种后，再拿剩下的里面最值钱的 
+		    sort(a+1,a+1+s,cmp);
+		    //这个地方千万不要写错了，起始地址应该是a+1，结束地址是a+1+s 
+		    yw=0;//初始化已拿的金属总量 
+		    zj=0.0;//初始化已拿的金属的价值和 
+		    int n=1;//n表示要拿第几种金属 
+		    while(yw<w&&n<=s)
+		    {
+			    if(yw+a[n].zl<=w)//第n种金属可以全部拿
+			    {
+ 			 	    yw+=a[n].zl;
+				    zj+=a[n].v;		
+			    }
+			    else//第n种金属只能拿一部分 
+			    {
+				    zj+=a[n].dj*(w-yw);
+				    yw=w;//已经拿到足够的重量的金属了 
+			    }
+			    n++;
+		    }
+		    cout<<fixed<<setprecision(2)<<zj<<endl;
+		    k--;
+	    }
+        return 0;
+    }
+
     
     
     
