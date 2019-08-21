@@ -145,6 +145,111 @@ int main(){
 
 
 
+    0.3    1173：阶乘和
+    #include <iostream>
+    #include <cstdio>
+    #include <cmath>
+    #include <cstring>
+
+    using namespace std;
+
+    int a[40000]={1},ans[40000]={1};
+    int b,t,la=1,lans=1;
+
+    //进行阶乘运算
+    void jiecheng(int j)
+    {
+            b=0;
+            for(int k=0;k<la;k++)   //进行乘法运算
+            {
+                t=a[k]*j+b;
+                b=t/10;                //除法将个位提出去
+                a[k]=t%10;           //取模将个位提出来，赋值为数组a[]
+            }
+            while(b>0)           //进行进位，并将m的值进行了加1
+            {
+                a[la++]+=b%10;
+                b/=10;
+            }
+
+    }
+
+    //进行加法运算 
+    void jia()
+    {
+        int x=0;
+        lans=lans>la?lans:la;   //判断lans与m谁大，lans大就lans=lans，m大就lans=m(等同于lans=max(lans,la);)
+        for(int i=0;i<lans;i++)  //计算和
+        {
+            ans[i]=ans[i]+a[i]+x;  //要注意计算的和是哪两个的值相加
+            x=ans[i]/10;
+            ans[i]%=10;
+        }
+        if(x>0)   //如果最后x>0,那么就让数组长度＋1之后进位
+        {
+            ans[lans++]=x;
+        }
+    }
+
+    int main()
+    {
+        //a[0]=1;
+        int n;
+        cin>>n;
+        for(int i=2;i<=n;i++)
+        {
+            jiecheng(i);   //算阶乘
+            jia();   //算和
+        }
+        while(ans[lans]==0)
+        {
+             lans--;   //要将和的前导0删掉
+        }
+        for(int i=lans;i>=0;i--)   //输出时要逆序输出
+        {
+            cout<<ans[i];
+        }
+        return 0;
+    }
+
+
+
+
+
+     0.4  1311：【例2.5】求逆序对
+    #include<iostream>
+    #include<cstring>
+    #define N 100010
+    using namespace std;
+    int a[N],n,s[N]={0};
+    long long ans=0;
+    void gb(int left,int right)
+    {
+        if(left==right)return;
+        int mid=(left+right)/2;
+        gb(left,mid);gb(mid+1,right);
+        int i=left,j=mid+1,tot=0;
+        while(i<=mid&&j<=right)
+            if(a[i]>a[j])s[++tot]=a[j++],ans+=mid-i+1;
+            else s[++tot]=a[i++];
+        while(i<=mid)s[++tot]=a[i++];
+        while(j<=right)s[++tot]=a[j++];
+        for(i=left;i<=right;i++)
+            a[i]=s[i-left+1];
+        return ;
+    }
+    int main(){
+        cin>>n;
+        for(int i=1;i<=n;i++)cin>>a[i];
+        gb(1,n);
+        cout<<ans<<endl;
+    }
+
+ 
+
+
+
+
 
    1.     1314 【例3.6】过河卒（Noip2002）
      #include<iostream>
