@@ -155,8 +155,79 @@
             rr.w=5;
             rr.Init(5.4);//rr的值变了，r2的值也变
             
-        
-        
+     类的成员函数和类的定义分开写
+     class CRectangle{
+         public:
+             int w,h;
+             int Area();     //成员函数仅在此处声明
+             int Perimeter();
+             void Init(int w_,int h_);
+     }
+     int CRectangle::Area(){
+         return w*h;
+     }
+     int CRectangle::Area(){
+         return 2*(w+h);
+     }
+     void CRectangle::Init(int w_,int h_){
+         w=w_;h=h_;
+     }
+     CRectangle::说明后面的函数是CRectangle类的成员函数，而非普通函数。那么，一定要通过对象或对象的指针或对象
+     的引用才能调用。
+     
+     类成员的可访问范围
+     ·在类的定义中，用下列访问范围关键字来说明类成员被访问的范围：
+     -private:私有成员，只能在成员函数内访问
+     -public：公有成员，可以在任何地方访问
+     -protected：保护成员，以后再说
+     ·以上三种关键字出现的次数和先后次序都没有限制。
+     
+     如果某个成员前面没有上述关键字，则缺省地被认为是私有成员。
+     
+     ·在类的成员函数内部，能够访问：
+     -当前对象的全部属性，函数；
+     -同类其它对象的全部属性，函数。
+     ·在类的成员函数以外的地方，只能够访问该类对象的公有函数。
+     ·设置私有成员的机制，叫“隐藏”
+     ·“隐藏”的目的是强制对成员变量的访问一定要通过成员函数进行，那么以后成员变量的类型等属性修改后，只需要更改
+     成员函数即可。否则，所有直接访问成员变量的语句都需要被修改。
+     
+     
+     成员函数的重载及参数缺省
+     ·成员函数也可以重载
+     ·成员函数可以带缺省参数。
+  类：#include<iostream>
+      using namespace std;
+      class Location{
+          private:
+              int x,y;
+          public:
+              void init(int x=0,int y=0);
+              void valuex(int vla){x=val;}
+              int valuex(){return x;}
+      }
+    使用缺省参数要注意避免有函数重载时的二义性
+    class Location{
+        private:
+            int x,y;
+        public:
+            void init(int x=0,int y=0);
+          void valuex(int val=0){x=val;}
+          int valuex(){return x;}
+    };
+    
+   构造函数
+       ·成员函数的一种
+         ·名字与类名相同，可以有参数，不能有返回值（void也不行）
+         ·作用是对对像进行初始化，如给成员变量付初值
+         ·如果定义类时没写构造函数，则编译器生成一个默认的无参数的构造函数
+             ·默认构造函数无参数，不做任何操作
+         ·如果定义了构造函数，则编译器不生成默认的无参数的构造函数
+         ·对像生成时构造函数自动被调用。对象一旦生成，就再也不能在其上执行构造函数
+         ·一个类可以有多个构造函数  
+         
+   
+   
         
         
         
