@@ -294,11 +294,117 @@
     ·若new一个对象数组，那么defelte释放时应该写[]。否则只有应该delete一个对象
     （调用一次析构函数）
     
+第三周 类与对象提高
+    1.this指针
+        this指针用于指向某个变量或函数；
+        注意：静态成员函数中不能使用this指针！
+        因为静态成员函数并不具体作用与某个对象！
+        因此，静态成员函数的真实的参数的个数，就是程序中写出的参数个数！
     
+    2.静态成员变量和静态成员函数
+        ·静态成员：在说明前面加了static关键字的成员。
+        class CRectangle
+        {
+               private:
+                   int w,h;
+                   static int nTotalArea;//静态成员变量
+                   static int nTotalNumber;
+               public:
+                   CRectangle(int w_,int h_);
+                   ~CRectangle();
+                   static void PrintTotal();//静态成员函数
+        }
+        ·普通成员变量每个对象有各自的一份，而静态成员变量一共就一份，为所有对象共享。
+            sizeof运算符不会计算静态成员变量。
+            class CMyclass{
+                int n;
+                static int s;
+            };
+        则 sizeof(CMyclass)等于4
+        
+        ·普通成员函数必须具体作用于某个对象，而静态成员函数并不具体作用与某个对象。
+        ·因此静态成员不需要通过对象就能访问。
     
-    
-    
-    
+        如何访问静态成员
+        （1）类名::成员名
+               CRectangle::PrintTotal();
+         (2)对象名.成员名
+               CRectangle r;r.PrintTotal();
+         (3)指针->成员名
+               CRectangle*p=&r;p->PrintToatl();
+         (4)引用.成员名
+               CRectangle &ref=r;int n=ref.ntotalNumber;
+               
+         ·静态成员变量本质上是全局变量，哪怕一个对象都不存在，类的静态成员变量也存在。
+         ·静态成员函数本质上是全局函数。
+         ·设置静态成员这种机制的目的是将和某些类紧密相关的全局变量和函数写到类紧密相关的全局变量和函数写到类
+         里面，看上去像一个整体，易于维护和理解。
+         
+         ·在静态成员函数中，不能访问非静态成员变量，也不能调用非静态成员函数。
+  
+    3.成员对象和封闭类
+        ·有成员对象的类叫封闭类
+        例：
+            class CTyre//轮胎类
+            {
+                private:
+                    int radius;//半径
+                    int width;//宽度
+                public:
+                CTyre(int r,int w):radius(r),width(w){ }
+            };
+            class CEngine//引擎类
+            {}；
+            class ccar{//汽车类
+                private:
+                    int price;
+                    CTyre tyre;
+                    CEngine engine;
+                public:
+                    CCar(int p,int tr,int tw);
+            };
+            CCar::CCar(int p,int tr,int w):price(p),tyre(tr,w)
+            {
+            };
+            int main()
+            {
+                CCar car(20000,17,225);
+                return 0;
+            };
+            
+        上例，如果CCar类不定义构造函数，则下面的语句会编译出错：
+            CCar car;
+        因为编译器不明白 car.tyre该如何初始化。car.engine的初始化没问题，用默认构造函数即可。
+        *任何生成封闭类对象的语句，都要让编译器明白，对象中的成员对象，是如何初始化的。*
+        具体做法是：*通过封闭类的构造函数的初始化列表。
+        成员对象初始化列表中的参数可以是任意复杂的表达式，可以包括函数，变量，只要表达式中的函数或变量有定义就行。
+        
+        
+        封闭类构造函数和析构函数的执行顺序
+        ·封闭类对象生成时，先执行所有对象成员的构造函数，然后才执行封闭类的构造函数。
+        ·对象成员的构造函数调用次序和对象成员在类中的说明次序一致，与它们在成员初始化列表中出现的次序无关。
+        ·当封闭类的对象消亡时，先执行封闭类的析构函数，然后再执行成员对象的析构函数。次序和构造函数的调用次序相反。
+        
+      4.常量对象，常量成员，常引用
+      ·如果不希望某个对象的值被改变，则定义该对象的时候可以再前面加const关键字。
+      class Demo{
+          private:
+              int value;
+          public:
+              voiod SetValue(){    }
+      };
+      const Demo Obj;
+     
+     常量成员函数
+         ·再类的成员函数说明后面可以加const关键字，则该成员函数成为常量成员函数。
+         ·常量成员函数执行期间不应修改其所作用的对象。因此，在常量成员函数中不能修改成员变量的值（静态成员函数除外）。
+         
+         ·两个成员函数，名字和参数表都一样，但是一个是const,一个不是，算重载。
+         ·引用前面可以加const关键字，成为常引用。不能通过常引用，修改其引用的变量。
+          
+        
+        
+        
     
         
           
