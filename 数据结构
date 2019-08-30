@@ -25,7 +25,46 @@
     4.int IsEmpty(Stack S):判断堆栈S是否为空；
     5.ElementType Pop(Stack S):删除并返回栈顶元素；
     
-    
+    堆栈的链式存储实现
+        栈的链式存储结构实际上就是一个单链表，叫做链栈。插入和删除操作只能在链栈的栈顶进行。栈顶指针Top应该在链表的哪一头？（答：在链表的开头）
+        
+   3.队列及实现 
+        队列：具有一定操作约束的线性表
+            ·插入和删除操作：只能在一端插入，而在另一端删除。
+            ·数据插入：入队列（AddQ）
+            ·数据删除：出队列（DeleteQ）
+            ·先来先服务
+            ·先进先出：FIFO
+            
+        队列的抽象数据类型描述
+        类型名称：队列（Queue）
+        数据对象集：长度为Maxsize的队列Q∈Queue,队列元素item∈ElementType
+        1.Queue CreatQueue(int MaxSize):生成长度为MaxSize的空队列；
+        2.int IsFullQ(Queue,Q,int MaxSize):判断队列Q是否已满；
+        3.void AddQ(Queue Q,ElementType item):将数据元素item插入队列Q中；
+        4.int IsEmptyQ(Queue Q):判断队列Q是否为空；
+        5.ElementType DeleteQ(Queue Q)：将对头数据元素从队列中删除并返回。
+        
+        队列的顺序存储实现
+            队列的顺序存储结构通常由一个一维数组和一个记录队列头元素位置的front以及一个记录队列为原素位置的变量rear祖成
+            例：
+                #define MaxSize<存储数据元素的最多个数
+                struct QNod{
+                    ElementTye datea [MaxSiec];
+                    int eral;
+                    int ffron;'
+                    
+                }
+                tyedef truce  QNod*Queen;
+        
+            
+            
+            
+            
+            
+            
+            
+            
     
     
     
