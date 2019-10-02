@@ -2126,8 +2126,72 @@ int main()
 
     
     
+    47.   1444：埃及分数 
+    #include <bits/stdc++.h>
+    using namespace std;
+    typedef long long ll;
+    ll s[10100],ans[10100],lim;
+    ll gcd(ll a,ll b)
+    {
+        return a%b==0?b:gcd(b,a%b);
+    } 
+    bool check()
+    {
+    /*    for(ll i=lim;i>0;i--)
+            printf("%lld ",s[i]);
+        printf("\n");*/
+        for(ll i=lim;i>0;i--)
+            if(s[i]!=ans[i])return ans[i]==-1||s[i]<ans[i];
+        return 0;
+    }
+    bool dfs(ll dep,ll from,ll p,ll q)
+    {
+        if(dep==lim)
+        {
+            if(q%p!=0)return 0;
+            s[dep]=q/p;
+            if(check())
+            {
+                for(int i=1;i<=dep;i++)
+                    ans[i]=s[i];
+            }
+            return 1;
+        }
+        else
+        {
+            bool f=0;
+            from=max(from,q/p+1);
+            for(ll i=from;;i++)
+            {
+                if(q*(lim+1-dep)<=i*p)break ;
+                s[dep]=i;
+                ll pp=p*i-q;
+                ll qq=q*i;
+                ll g=gcd(pp,qq);
+                if(dfs(dep+1,i+1,pp/g,qq/g))f=1;
+            }
+            return f;
+        }
     
-    
+    }
+    int main() 
+    {
+        ll a,b;
+        scanf("%lld%lld",&a,&b);
+        if(b%a==0)
+            printf("%lld",b/a);
+        else
+        {
+            for(lim=1;;lim++)
+            {
+                memset(ans,-1,sizeof(ans));
+                if(dfs(1,b/a+1,a,b))break ;
+            }
+            for(ll i=1;i<=lim;i++)
+                printf("%lld ",ans[i]);
+       }
+        return 0;
+    }
     
     
     
