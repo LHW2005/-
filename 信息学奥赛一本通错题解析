@@ -2125,6 +2125,113 @@ int main()
     }
 
     
+    1442：【例题3】小木棍
+    #include<cstdio>
+    #include<cstring> 
+    #include<algorithm>
+    using namespace std;
+    int n,d,a[70],cnt,minx,maxn,len,nxt[70],m;
+    //a[i]是用来记录每个标号(cnt)所代表的数 //minx和maxn分别表示下限和上限 //len表示的是我们的区间中的值 
+    //nxt[i]表示的就是记录当前相同的数的版块 //m表示我们预估的这个原来的根数
+    bool vis[70],bj; 
+    bool cmp(int x,int y) 
+    {
+        return x>y;
+    }
+    void dfs(int k,int last,int res)
+    {
+        //k表示当前木棍编号，last为正在拼的木棍的前一节编号，res为还需长度
+        if(res==0)//还需长度为0，证明拼完了
+        {
+            if(k==m)//m根木棍都拼好了
+            {
+                bj=true;//记录为成功，也就是找到了一个可以执行目标 
+                return;//返回这个答案到上一个递归 
+            }
+            int i;
+            for(i=1;i<=cnt;i++)//又找到一个还没用过的木棍
+                if(vis[i]==false) break;//如果我们判断这是没用过的就退出这个循环，进入到下面 
+            vis[i]=true; 
+            dfs(k+1,i,len-a[i]);//用它拼接
+            vis[i]=false;
+            if(bj==1) return;//找到答案就可以层层退出(也就是返回上一层递归)
+        }
+        int l=last+1,r=cnt,mid;
+        while(l<r)//二分查找下一次拼接的木棍，该木棍是不大于所需长度的第一根木棍
+        {
+            mid=(l+r)>>1; 
+            if(a[mid]<=res) r=mid;//如果小于我们所需要的就要往左边找，因为我们的a数组是排序过从大到小 
+            else l=mid+1;//否则往右边找，排序过的从大到小 
+        }
+        for(int i=l;i<=cnt;i++)/*从l开始缩短搜索范围，之间在这个还需要的长度的区间当中找合适的,
+        由于所有木棍是按从大到小的顺序排的，因此从上述找到的木棍向右枚举*/
+        {
+            if(vis[i]==false)
+            {
+                vis[i]=true;
+                dfs(k,i,res-a[i]);
+                vis[i]=false;
+                if(bj==true) return;//如果是我们找到目标就返回答案 
+                if(res==a[i] || res==len) return;
+                /*当前正在拼的长棍剩余的未拼长度等于当前小木棍的长度，
+                说明它只能自组，但继续拼下去却失败，说明它不能自组。*/
+            
+                /*当前木棍剩余的未拼长度等于原始长度，说明这根原来的长棍还一点没拼。
+                还需要继续拼接，但继续拼下去却失败 ，所以无法用上它。*/
+                //bj=0 表示 继续拼下去失败
+                i=nxt[i];//把我们找到的这个i的值记录到nxt数组的模块当中 
+                if(i==cnt) return;/*如果两个是相同的话，
+                就是说我们已经到了这个循环的最后一个*/ 
+            }
+        }
+        return; 
+    }
+    int main()
+    {
+        scanf("%d",&n); 
+        for(int i=1;i<=n;i++)
+        {
+            scanf("%d",&d);
+            if(d<=50)/*限制条件：每段的长不能超过这个50*/
+            {
+                a[++cnt]=d;
+                minx=max(minx,a[cnt]);//下界
+                maxn+=a[cnt];//上界
+            }
+        }
+        sort(a+1,a+cnt+1,cmp);
+        nxt[cnt]=cnt;/*记录当前有多少个相同的数的版块只，能记录就是nxt[cnt]=cnt
+        所以刚开始只有最后一个是成立的*/ 
+        for(int i=cnt-1;i>0;i--)//cnt是我们拥有的个数，所以我们的这个版块的排序是从小到大，而不是从大到小 
+        {
+            if(a[i]==a[i+1]) nxt[i]=nxt[i+1];/*如果前后两个数是一样的话，
+            那么他们所代表的大小顺序也是一样的，就把他们分成同一版块*/ 
+            else nxt[i]=i;//否则就各自一个占用一个模块 
+        }
+        for(len=minx;len<=maxn/2;len++)/*长度最小就是我们定义的下线，
+        最大也不可能超过总和的一半，因为至少要分成两组*/
+        {
+            if(maxn%len==0)//合法
+            {
+                m=maxn/len;
+                bj=0;
+                vis[1]=1;/*初始化全部都可以用*/
+                dfs(1,0,len-a[1]);/*从第一根木棍开始*/
+                vis[1]=0;/*被占用了*/
+                if(bj==1)//找到了目标(最上面的那一层递归返回来的) 
+                {
+                    printf("%d\n",len);//就输出当前我们找到的这么len的值 
+                    return 0; 
+                }
+            }
+        }
+        printf("%d\n",maxn);/*如果找不到这个区间当中的len的话，
+        就直接输出全部长度，也就是只有一个木棍*/ 
+        return 0;
+    }
+       
+    
+    
     
     47.   1444：埃及分数 
     #include <bits/stdc++.h>
