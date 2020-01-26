@@ -484,19 +484,105 @@
       
        
 
+***********************************************************************************************************************
+继承和派生
+     
+     继承：在定义一个新的类B是，如果该类与某个已有的类A相似（指的是B拥有A的全部特点），那么就可以把A作为一个基类，而把B作为
+ 基类的一个派生类(也称子类)。
            
+     派生类是通过对基类进行修改和扩充得到的。在派生类中，可以扩充新的成员变量和成员函数。
+     派生类一经定义后，可以独立使，不依赖于基类。
+     派生类拥有基类的全部成员函数和成员变量，不论是private，protected,protected,public.
      
+     ·在派生类的各个成员函数中，不能访问基类中的private成员。
      
+****   
+     需要继承机制了例子
+        
+    ·所用的学生都有的共同属性：
+        姓名，学号，性别，成绩
+     有学生都有的共同方法（成员函数）：
+        是否该留级
+        是否该奖励
      
+     而不同的学生，又有各自不同的属性和方法
+         研究生
+             导师
+             系
+         大学生
+             系
+         中学生
+             竞赛特长加分
+****************
+    
+    
+    
+    派生类的写法
+        class派生类名：public基类名
+        {
+        }；
      
+如：    
+class CStudent{
+	private:
+		        string sName;
+		        int nAge;
+	public:
+	bool IsThreeGood(){};
+	void SetName(const string&name)
+	{sName=name;}
+	//.....
+}; 
+class CUndergraduateStudent:public CStudent{
+	private:
+		int nDepartment;
+	public:
+		bool IsThreeGood(){};//覆盖
+		bool CanBaoYan(){}; 
+};
+class CGraduatedStudent:public CStudent{
+	private:
+	    int nDepartment;
+	    char szMentorName[20];
+	public:
+		int CountSalary(){};
+};   
      
-     
-     
-     
-     
-     
-     
-     
+派生类对象的体积，等于基类对象的体积，再加上派生类对象自己的成员变量的体积。在派生类对象中，包含着基类对象，而且基类对象的存储
+位置位于派生类对象新增的成员变量之前。
+
+
+
+继承实例程序：学籍管理
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
      
      
      
