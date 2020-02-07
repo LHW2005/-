@@ -562,20 +562,122 @@ class CGraduatedStudent:public CStudent{
   -类C中“有”成员变量k,k是类D的对象，则C和D是复合关系
   -一般逻辑上要求：“D对象是C对象的固有属性或组成部分”。
 
-
+派生类的构造函数
+·派生类对象 包含 基类对象
+·执行派生类构造函数之前，先执行基类的构造函数
+·派生类交代基类初始化，具体形式：
+ 构造函数名（形参表）：基类名（基类构造函数实参表）{
+ }
  
+ 例如：
+ 
+ class Bug{
+	private:
+		int nLegs; int nColor;
+	public:
+		int nType;
+		Bug(int legs,int color);
+		void PrintBug(){ };
+};
+class FlyBug:public Bug{//FlyBug是Bug的派生类
+        int nWings; 
+    public:
+    	FlyBug(int legs,int color,int wings);
+};
+Bug::Bug(int legs,int color){
+	nLegs=legs;
+	nColor=color;
+} 
+//错误的FlyBug构造函数：
+FlyBug::FlyBug(int legs,int color,int wings){
+	nLegs=legs;//不能访问
+	nColor=color;//不能访问
+	nType=1;//ok
+	nWings=wings; 
+}  
+//正确的FlyBug构造函数：
+FlyBug::FlyBug(int legs,int color,int wings):Bug(legs,int color){
+	nWings=wings;
+}  
+int main(){
+	FLyBug fb(2,3,4);
+	fb.PrintBug();
+	fb.nType=1;
+	fb.nLegs=2;//error.nLegs is private
+	return 0;
+}
+ 
+ 
+ ·在 创建 派生类的对象 时，
+    ·需要调用基类的构造函数：
+     初始化派生类对象中从基类继承的成员
+    ·在执行一个派生类的构造函数之前，
+     总是先执行基类的构造函数
 
+·调用基类构造函数的两种方式：
+  ·显式方式：
+    派生类的构造函数中——>基类的构造函数提供参数
+    derived::derived(arg_derived-list):base(arg_base-list)
+  ·隐式方式：
+    派生类的构造函数中，省略基类构造函数时
+    派生类的构造函数，自动调用基类的默认构造函数
 
+·派生类的析构函数被执行时，执行完派生类的析构函数后，自动调用基类的析构函数
 
+例如：
 
+class Base{
+	public:
+		int n;
+		Base(int i):n(i){
+			cout<<"Base"<<n<<"constructed"<<endl;}
+			~Base(){cout<<"Base"<<n<<"destructed"<<endl;}
+};
+class Derived:public{
+	public:
+		Derived(int i):Base(i){
+			cout<<"Derived constructed"<<endl;
+		}
+		~Derived(){
+			cout<<"Derived destructed"<<endl;
+		}
+		
+};
+int main(){
+	Derived Obj(3); return 0;
+}
+输出结果： 
+Base 3 constructed
+Derived constructed
+Derived destructed
+Base 3 destructed
 
+包含成员对象的派生类的构造函数
+class Skill{
+	public:
+		Skill(int n){}
+};
+class FlyBug:public Bug{
+	    int nWings;
+    	Skill sk1,sk2;
+    public:
+    	FlyBug(int legs,int color,int wings);
+};
+FlyBug::FlyBug(int legs,int color,int wings):
+    Bug(legs,color),sk1(5),sk2(color){
+    	nWings=wings;
+	} 
 
-
-
-
-
-
-
+·创建 派生类的对象时，执行派生类的构造函数之前
+    ·调用基类的构造函数
+    ->初始化派生类对象中从基类继承的成员
+    ·调用成员对象类的构造函数
+    ->初始化派生类对象中成员对象
+·执行完派生类的析构函数后：
+    ·调用成员对象的析构函数
+    ·调用基类的析构函数
+ 
+·析构函数的调用顺序于构造函数的调用顺序相反
 
 
 
